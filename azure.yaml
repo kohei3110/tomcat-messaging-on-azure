@@ -1,0 +1,7 @@
+name: tomcat-messaging-on-azure
+hooks:
+  postprovision:
+    shell: sh
+    run: |
+      echo "Deploy Web App"
+      ./deploy-webapp.sh

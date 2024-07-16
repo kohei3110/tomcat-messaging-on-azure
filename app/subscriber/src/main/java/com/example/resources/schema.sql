@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (id VARCHAR(255) PRIMARY KEY, message VARCHAR(255));
