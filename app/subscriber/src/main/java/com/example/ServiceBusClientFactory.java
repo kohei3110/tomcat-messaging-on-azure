@@ -29,8 +29,9 @@ public class ServiceBusClientFactory {
                     // リトライロジックを適用してメッセージを処理
                     Retry.decorateRunnable(retry, () -> {
                         try {
-                            // messageProcessor.processMessage(context);
-                            throw new SQLException("Simulated database error");
+                            messageProcessor.processMessage(context);
+                            // 【ご参考】データベースエラーをシミュレートする場合は、以下のコメントを解除してください。
+                            // throw new SQLException("Simulated database error");
                         } catch (SQLException e) {
                             int retryCount = messageProcessor.logErrorAndIncrementRetryCount(context.getMessage(), e);
                             if (retryCount >= 3) {
@@ -59,7 +60,7 @@ public class ServiceBusClientFactory {
             .buildProcessorClient();
     }
 
-    public ServiceBusProcessorClient buildDlqClient(TokenCredential credential) {
+    public ServiceBusProcessorClient buildDlqClient(TokenCredential credential, MessageProcessor messageProcessor) {
         return new ServiceBusClientBuilder()
             .fullyQualifiedNamespace(System.getenv("SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE"))
             .credential(credential)
@@ -77,8 +78,7 @@ public class ServiceBusClientFactory {
                 @Override
                 public void accept(ServiceBusErrorContext context) {
                     try {
-                        new MessageProcessor(new DatabaseService(DatabaseConnectionManager.getConnection()))
-                            .processError(context);
+                        messageProcessor.processError(context);
                     } catch (Exception e) {
                         System.out.println(e.toString());
                     }    
