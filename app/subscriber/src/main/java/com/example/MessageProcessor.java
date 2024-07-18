@@ -4,11 +4,14 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.azure.core.credential.TokenCredential;
+import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusErrorContext;
 import com.azure.messaging.servicebus.ServiceBusException;
 import com.azure.messaging.servicebus.ServiceBusFailureReason;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessageContext;
+import com.azure.messaging.servicebus.ServiceBusReceiverClient;
 
 public class MessageProcessor {
     private final DatabaseService databaseService;
@@ -55,4 +58,37 @@ public class MessageProcessor {
                 reason, context.getException());
         }
     }
+
+    /**
+     * メッセージをDLQに送信するメソッドです。
+     * @param context メッセージコンテキスト
+     * @param credential トークンクレデンシャル
+     */
+    public void sendToDLQ(ServiceBusReceivedMessageContext context, TokenCredential credential) {
+        System.out.println("Sending message to DLQ");
+        ServiceBusReceiverClient serviceBusReceiverClient = new ServiceBusClientBuilder()
+            .fullyQualifiedNamespace(System.getenv("SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE"))
+            .credential(credential)
+            .receiver()
+            .queueName("lower-case")
+            .buildClient();
+        serviceBusReceiverClient.deadLetter(context.getMessage());
+    }
+
+    /**
+     * サービスバスメッセージの処理中に発生したエラーをログに記録し、リトライカウントをインクリメントします。
+     * メッセージのカスタムプロパティ「retry-count」にリトライ回数をセットします（初回の場合は1がセットされます）。
+     *
+     * @param message 処理中のサービスバスメッセージ
+     * @param e 発生した例外
+     * @return 更新されたリトライカウントの値
+     */
+    public int logErrorAndIncrementRetryCount(ServiceBusReceivedMessage message, Exception e) {
+        message.getApplicationProperties().put("retry-count", (int) message.getApplicationProperties().getOrDefault("retry-count", 0) + 1);
+        System.out.println(message.getApplicationProperties().get("retry-count"));
+        System.out.println(e.toString());
+        System.out.println("Failed to process message: " + message.getBody());
+        return (int) message.getApplicationProperties().get("retry-count");
+    }
+
 }

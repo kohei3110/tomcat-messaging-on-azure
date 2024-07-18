@@ -55,11 +55,9 @@ echo "========================================"
 az webapp restart -g ${AZURE_RESOURCE_GROUP} -n ${APPSERVICE_WEBAPP_NAME}
 
 echo "========================================"
-echo "Allowing local IP address to access the SQL Database"
+echo "Allowing IP address to access the SQL Database"
 echo "========================================"
 SQL_SERVER_NAME=`az sql server list --query "[?contains(name, 'sqldb-tomcatonazure')].{name:name}" -o tsv`
-# LOCAL_PUBLIC_IP=$(curl -s ifconfig.me)
-# echo "Local IP Address: $LOCAL_PUBLIC_IP"
 
 ACA_FQDN=`az containerapp show --name ${ACA_NAME} --resource-group ${AZURE_RESOURCE_GROUP} --query properties.configuration.ingress.fqdn -o tsv`
 ACA_PUBLIC_IP=$(nslookup $ACA_FQDN | awk '/^Address: / { print $2 }' | tail -n1)
