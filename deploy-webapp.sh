@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AZURE_RESOURCE_GROUP=`az group list --query "[?contains(name, 'rg-tomcatonazure-')].{name:name}" -o tsv`
-ACR_NAME=`az acr list --query "[?starts_with(name, 'cr') && ends_with(name, '001')].[name]" -o tsv`
+ACR_NAME=`az acr list --query "[?starts_with(name, 'crtomcat') && ends_with(name, '001')].[name]" -o tsv`
 ACR_REPOSITORY_NAME_PUBLISHER=publisher
 ACR_REPOSITORY_NAME_SUBSCRIBER=subscriber
 APPSERVICE_PLAN_NAME=`az appservice plan list --query "[?contains(name, 'plan-tomcatonazure')].{Name:name}" -o json | jq -r '.[].Name'`
