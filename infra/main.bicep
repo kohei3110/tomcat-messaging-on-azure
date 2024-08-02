@@ -15,7 +15,6 @@ var tags = {
 }
 
 var abbrs = loadJsonContent('./abbreviations.json')
-var serviceBusNamespaceName = '${abbrs.serviceBusNamespaces}tomcatonazure-${environmentName}-${location}-001'
 
 resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: 'rg-tomcatonazure-${environmentName}-${location}-001'
@@ -51,16 +50,6 @@ module containerRegistry 'modules/core/registry.bicep' = {
   }
 }
 
-module serviceBus 'modules/servicebus/servicebus.bicep' = {
-  name: '${abbrs.serviceBusNamespaces}tomcatonazure-${environmentName}-${location}-001'
-  scope: resourceGroup(rg.name)
-  params: {
-    serviceBusNamespaceName: serviceBusNamespaceName
-    location: location
-    tags: tags
-  }
-}
-
 module containerApp 'modules/app/containerapp.bicep' = {
   name: '${abbrs.appContainerApps}tomcatonazure-${environmentName}-${location}-001'
   scope: resourceGroup(rg.name)
@@ -71,13 +60,12 @@ module containerApp 'modules/app/containerapp.bicep' = {
   }
 }
 
-module sqldb 'modules/database/sqldb.bicep' = {
-  name: '${abbrs.sqlServersDatabases}tomcatonazure-${environmentName}-japaneast-001'
+module fileServer 'modules/core/files.bicep' = {
+  name: '${abbrs.storageStorageAccounts}${resourceToken}${location}001'
   scope: resourceGroup(rg.name)
   params: {
-    serverName: '${abbrs.sqlServersDatabases}tomcatonazure-${environmentName}-japaneast-001'
-    location: 'japaneast'
-    administratorLogin: 'sqladmin'
-    administratorLoginPassword: 'Password123!'
+    documentStorageName: '${abbrs.storageStorageAccounts}${resourceToken}${location}001'
+    location: location
+    tags: tags
   }
 }

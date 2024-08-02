@@ -21,6 +21,7 @@
 
 プロジェクトを開始する前に、以下のツールがインストールされていることを確認してください。
 
+- [Git](https://git-scm.com/book/ja/v2/%E4%BD%BF%E3%81%84%E5%A7%8B%E3%82%81%E3%82%8B-Git%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB) - 本ハンズオンをクローンするために必要です。
 - [Azure Developer CLI](https://learn.microsoft.com/ja-jp/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-mac) - Azure リソースを管理するために必要です。
 
 ## セットアップ手順
@@ -45,20 +46,3 @@
 ## 既知の問題
 
 - マルチステージビルドによるコンテナのスリム化
-
-- Publisher アプリケーションビルド時のエラー（動作には影響なし）
-
-```
-org.apache.tomcat.util.bcel.classfile.ClassFormatException: Invalid byte tag in constant pool: 19
-	at org.apache.tomcat.util.bcel.classfile.Constant.readConstant(Constant.java:133)
-	at org.apache.tomcat.util.bcel.classfile.ConstantPool.<init>(ConstantPool.java:60)
-	at org.apache.tomcat.util.bcel.classfile.ClassParser.readConstantPool(ClassParser.java:209)
-```
-
-- SQL Database への接続設定
-
-    - 「Azure サービスおよびリソースにこのサーバーへのアクセスを許可する」をセット
-
-- Service Bus への権限設定
-
-    - サービスプリンシパルの権限「Azure Service Bus のデータ所有者」を手動でセット
