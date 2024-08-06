@@ -1,0 +1,1 @@
+create-zip.sh を実行し、WebJobs にデプロイする zip ファイルを作成。

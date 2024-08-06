@@ -36,7 +36,7 @@ public class Subscriber {
         ServiceBusClientFactory factory = new ServiceBusClientFactory();
         ServiceBusUtil util = new ServiceBusUtil();
         ServiceBusProcessorClient processorClient = factory.buildQueueClient(credential, messageProcessor);
-        ServiceBusProcessorClient dlqClient = factory.buildDlqClient(credential);
+        ServiceBusProcessorClient dlqClient = factory.buildDlqClient(credential, messageProcessor);
 
         util.startAndStopClient(processorClient, 20);
         util.startAndStopClient(dlqClient, 20);
