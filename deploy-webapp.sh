@@ -6,6 +6,7 @@ ACR_REPOSITORY_NAME_SEASAR=seasar
 APPSERVICE_PLAN_NAME=`az appservice plan list --query "[?contains(name, 'plan-tomcatonazure')].{Name:name}" -o json | jq -r '.[].Name'`
 ACA_NAME=`az containerapp list --query "[?contains(name, 'ca-tomcatonazure')].name" -o tsv`
 ACE_NAME=`az containerapp env list --query "[?contains(name, 'env-tomcatonazure')].name" -o tsv`
+SUBSCRIPTION_ID=`az account show --query id -o tsv`
 
 echo "========================================"
 echo "login ACR"
@@ -24,7 +25,7 @@ docker push ${ACR_NAME}.azurecr.io/${ACR_REPOSITORY_NAME_SEASAR}:latest
 echo "========================================"
 echo "Creating App Service (Seasar)"
 echo "========================================"
-az webapp create --resource-group ${AZURE_RESOURCE_GROUP} --plan ${APPSERVICE_PLAN_NAME} --name app-tomcatonazure --container-image-name ${ACR_NAME}.azurecr.io/${ACR_REPOSITORY_NAME_SEASAR}:latest --container-registry-password ${ACR_PASS} --container-registry-user ${ACR_USER}
+az webapp create --resource-group ${AZURE_RESOURCE_GROUP} --plan ${APPSERVICE_PLAN_NAME} --name app-seasarstruts-${SUBSCRIPTION_ID} --container-image-name ${ACR_NAME}.azurecr.io/${ACR_REPOSITORY_NAME_SEASAR}:latest --container-registry-password ${ACR_PASS} --container-registry-user ${ACR_USER}
 
 echo "========================================"
 echo "Creating WebJobs outputs"

@@ -1,9 +1,0 @@
-FROM maven:3.8.4-openjdk-8
-
-ENV AZURE_TENANT_ID="YOUR_AZURE_TENANT_ID"
-ENV AZURE_CLIENT_ID="YOUR_AZURE_CLIENT_ID"
-ENV AZURE_CLIENT_SECRET="YOUR_AZURE_CLIENT_SECRET"
-ENV SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE="YOUR_SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE (e.g. xxxxxxxxxxxx.servicebus.windows.net)"
-ENV DB_CONNECTION_STRING="jdbc:sqlserver://DB_NAME.database.windows.net:1433;database=SampleDB;user=sqladmin@DB_NAME;password=YOUR_PASSWORD;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
-COPY . .
-CMD ["java", "-jar", "target/subscriber-1.0-SNAPSHOT.jar"]
