@@ -19,8 +19,7 @@ echo "========================================"
 echo "webapp build and push (Seasar)"
 echo "========================================"
 cd ./app/1.seasar
-az acr build -t ${ACR_NAME}.azurecr.io/${ACR_REPOSITORY_NAME_SEASAR}:latest --platform linux/x86_64 .
-az acr push ${ACR_NAME}.azurecr.io/${ACR_REPOSITORY_NAME_SEASAR}:latest
+az acr build -r ${ACR_NAME} -t ${ACR_NAME}.azurecr.io/${ACR_REPOSITORY_NAME_SEASAR}:latest .
 
 echo "========================================"
 echo "Creating App Service (Seasar)"
