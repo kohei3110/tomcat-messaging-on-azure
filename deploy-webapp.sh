@@ -32,7 +32,7 @@ echo "Creating WebJobs outputs"
 echo "========================================"
 cd ../2.scheduled-tasks && chmod +x create-zip.sh && ./create-zip.sh
 
-APPSERVICE_WEBAPP_NAME=`az webapp list --query "[?contains(name, 'app-tomcatonazure')].[name]" -o tsv`
+APPSERVICE_WEBAPP_NAME=`az webapp list --query "[?contains(name, 'app-seasarstruts')].[name]" -o tsv`
 az webapp config appsettings set --resource-group ${AZURE_RESOURCE_GROUP} --name ${APPSERVICE_WEBAPP_NAME} --settings WEBSITES_PORT=8080
 az webapp config appsettings set --resource-group ${AZURE_RESOURCE_GROUP} --name ${APPSERVICE_WEBAPP_NAME} --settings WEBSITES_ENABLE_APP_SERVICE_STORAGE=true
 
